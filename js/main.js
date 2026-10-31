@@ -272,11 +272,7 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     setOpen(cartDrawer, false);
     setOpen(loginModal, false);
-
     document.body.classList.remove("menu-open");
-    menuToggle.setAttribute("aria-expanded", "false");
-
-    document.body.style.overflow = "";
   }
 });
 
