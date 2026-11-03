@@ -1348,3 +1348,9 @@ input { background: #0b0e18; }
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; animation: none; }
 }
+
+
+/* Hero title accent */
+.hero__content h1 {
+  color: #ef4444;
+}
