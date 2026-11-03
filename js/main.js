@@ -225,11 +225,24 @@ function removeFromCart(id) {
   showToast("Товар удалён");
 }
 
+let previouslyFocused = null;
+
 function setOpen(element, open) {
   if (!element) return;
-  element.classList.toggle("is-open", open);
-  element.setAttribute("aria-hidden", String(!open));
-  document.body.style.overflow = open || document.body.classList.contains("menu-open") ? "hidden" : "";
+  if (open) {
+    previouslyFocused = document.activeElement;
+    element.classList.add("is-open");
+    element.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    const firstControl = element.querySelector("button, input, a[href], [tabindex]:not([tabindex="-1"])");
+    window.requestAnimationFrame(() => firstControl?.focus());
+  } else {
+    element.classList.remove("is-open");
+    element.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = document.body.classList.contains("menu-open") ? "hidden" : "";
+    if (previouslyFocused && typeof previouslyFocused.focus === "function") previouslyFocused.focus();
+    previouslyFocused = null;
+  }
 }
 
 function updateLoginView() {
@@ -324,6 +337,22 @@ nav.addEventListener("click", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
+  const activeDialog = document.querySelector(".drawer.is-open, .modal.is-open");
+  if (event.key === "Tab" && activeDialog) {
+    const focusable = [...activeDialog.querySelectorAll("button:not([disabled]), input:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])")]
+      .filter((element) => element.offsetParent !== null);
+    if (focusable.length) {
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+  }
   if (event.key === "Escape") {
     setOpen(cartDrawer, false);
     setOpen(loginModal, false);
