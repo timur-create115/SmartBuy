@@ -206,7 +206,7 @@ a {
 }
 
 .btn--ghost {
-  color: var(--text);
+  color: red(--text);
   background: transparent;
   border: 1px solid var(--line);
 }
