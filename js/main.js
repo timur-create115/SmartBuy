@@ -1,34 +1,15 @@
 const PRODUCTS = [
-  {
-    id: "iphone-16-pro",
-    name: "iPhone 16 Pro",
-    price: 129990,
-    image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=800&q=80",
-    specs: ["6,3\" Super Retina XDR", "A18 Pro, 256 ГБ", "Камера 48 Мп"]
-  },
-  {
-    id: "galaxy-s25-ultra",
-    name: "Samsung Galaxy S25 Ultra",
-    price: 119990,
-    image: "https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&w=800&q=80",
-    specs: ["6,8\" Dynamic AMOLED", "Snapdragon 8 Elite", "S Pen в комплекте"]
-  },
-  {
-    id: "pixel-9-pro",
-    name: "Google Pixel 9 Pro",
-    price: 94990,
-    image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=800&q=80",
-    specs: ["6,3\" LTPO OLED", "Google Tensor G4", "Магия Pixel Camera"]
-  },
-  {
-    id: "xiaomi-15-ultra",
-    name: "Xiaomi 15 Ultra",
-    price: 89990,
-    image: "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?auto=format&fit=crop&w=800&q=80",
-    specs: ["6,73\" AMOLED 120 Гц", "Leica оптика", "Зарядка 90 Вт"]
-  }
+  { id:"iphone-16", name:"iPhone 16", price:99990, oldPrice:null, badge:"Хит продаж", brand:"Apple", image:"https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=800&q=85", specs:["256 ГБ","Чёрный"] },
+  { id:"samsung-s25-ultra", name:"Samsung Galaxy S25 Ultra", price:124990, badge:"Новинка", brand:"Samsung", image:"https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&w=800&q=85", specs:["256 ГБ","Титановый серый"] },
+  { id:"xiaomi-15", name:"Xiaomi 15", price:76490, oldPrice:89990, badge:"Скидка −15%", brand:"Xiaomi", image:"https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?auto=format&fit=crop&w=800&q=85", specs:["512 ГБ","Чёрный"] },
+  { id:"realme-gt7", name:"realme GT 7", price:69990, badge:"Бестселлер", brand:"realme", image:"https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=800&q=85", specs:["256 ГБ","Синий"] },
+  { id:"iphone-16-pro", name:"iPhone 16 Pro", price:139990, badge:"Хит продаж", brand:"Apple", image:"https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=800&q=85", specs:["256 ГБ","Пустынный титан"] },
+  { id:"samsung-s25-plus", name:"Samsung Galaxy S25+", price:109990, badge:"Новинка", brand:"Samsung", image:"https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?auto=format&fit=crop&w=800&q=85", specs:["256 ГБ","Синий"] },
+  { id:"xiaomi-14t", name:"Xiaomi 14T", price:71990, oldPrice:79990, badge:"Скидка −10%", brand:"Xiaomi", image:"https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?auto=format&fit=crop&w=800&q=85", specs:["256 ГБ","Серый"] },
+  { id:"oneplus-13", name:"OnePlus 13", price:99990, badge:"Бестселлер", brand:"OnePlus", image:"https://images.unsplash.com/photo-1598327105666-5b89351aff97?auto=format&fit=crop&w=800&q=85", specs:["512 ГБ","Чёрный"] }
 ];
 
+let activeBrand = null;
 const CART_KEY = "smartbuy-cart";
 const USER_KEY = "smartbuy-user";
 const MAX_QUANTITY = 99;
@@ -125,22 +106,27 @@ function showToast(message) {
   showToast.timer = window.setTimeout(() => toastEl.classList.remove("is-show"), 3000);
 }
 
-function renderCatalog() {
-  catalogGrid.innerHTML = PRODUCTS.map((product) => `
-    <article class="card reveal">
-      <div class="card__media">
-        <img src="${product.image}" alt="${product.name}" width="400" height="240" loading="lazy">
-      </div>
+function renderCatalog(filter = "") {
+  const query = filter.trim().toLowerCase();
+  const visible = PRODUCTS.filter((product) => {
+    const matchesQuery = !query || (product.name + " " + product.brand).toLowerCase().includes(query);
+    const matchesBrand = !activeBrand || activeBrand === "sale" ? (!activeBrand || Boolean(product.oldPrice)) : product.brand === activeBrand;
+    return matchesQuery && matchesBrand;
+  });
+  catalogGrid.innerHTML = visible.length ? visible.map((product) => `
+    <article class="card">
+      <span class="card__badge">${product.badge}</span>
+      <div class="card__media"><img src="${product.image}" alt="${product.name}" width="400" height="300" loading="lazy"></div>
       <div class="card__body">
         <h3>${product.name}</h3>
-        <ul class="card__specs">
-          ${product.specs.map((spec) => `<li>${spec}</li>`).join("")}
-        </ul>
-        <div class="card__price">${formatPrice(product.price)}</div>
-        <button class="btn btn--primary" type="button" data-add="${product.id}">В корзину</button>
+        <ul class="card__specs"><li>${product.specs.join(" · ")}</li></ul>
+        <div class="card__bottom">
+          <div><div class="card__old-price">${product.oldPrice ? formatPrice(product.oldPrice) : ""}</div><div class="card__price ${product.oldPrice ? "card__price--sale" : ""}">${formatPrice(product.price)}</div></div>
+          <button class="card__add" type="button" data-add="${product.id}" aria-label="Добавить ${product.name} в корзину"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.1 11.2a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="10" cy="20" r="1.2"/><circle cx="18" cy="20" r="1.2"/></svg></button>
+        </div>
       </div>
     </article>
-  `).join("");
+  `).join("") : '<p class="cart-empty">По вашему запросу ничего не найдено.</p>';
 }
 
 function cartCount() {
@@ -365,3 +351,17 @@ document.addEventListener("keydown", (event) => {
 renderCatalog();
 renderCart();
 updateLoginView();
+
+const searchToggle = document.getElementById("search-toggle");
+const searchBar = document.getElementById("search-bar");
+const catalogSearch = document.getElementById("catalog-search");
+if (searchToggle && searchBar) searchToggle.addEventListener("click", () => {
+  searchBar.hidden = !searchBar.hidden;
+  if (!searchBar.hidden) catalogSearch.focus();
+});
+if (catalogSearch) catalogSearch.addEventListener("input", () => renderCatalog(catalogSearch.value));
+document.querySelectorAll("[data-brand]").forEach((tile) => tile.addEventListener("click", () => {
+  activeBrand = tile.dataset.brand;
+  if (catalogSearch) catalogSearch.value = "";
+  renderCatalog();
+}));
