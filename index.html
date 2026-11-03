@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>SmartBuy — смартфоны будущего</title>
+  <meta name="description" content="SmartBuy — демонстрационный каталог смартфонов. Изучите модели, характеристики и работу корзины.">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="SmartBuy — каталог смартфонов">
+  <meta property="og:description" content="Демонстрационный магазин смартфонов с интерактивной корзиной.">
+  <meta property="og:url" content="https://timur-create115.github.io/SmartBuy/">
+  <title>SmartBuy — каталог смартфонов</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0a0f'/%3E%3Cpath d='M10 8h12a2 2 0 012 2v12a2 2 0 01-2 2H10a2 2 0 01-2-2V10a2 2 0 012-2zm6 15.5a1 1 0 100-2 1 1 0 000 2z' fill='%23a855f7'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,241 +18,56 @@
 </head>
 <body>
   <div class="page-glow" aria-hidden="true"></div>
-
   <header class="header" id="header">
     <div class="container header__inner">
-      <a class="logo" href="#hero" aria-label="SmartBuy — на главную">
-        <span class="logo__mark">SB</span>
-        <span class="logo__text">SmartBuy</span>
-      </a>
-
+      <a class="logo" href="#hero" aria-label="SmartBuy — на главную"><span class="logo__mark">SB</span><span class="logo__text">SmartBuy</span></a>
       <nav class="nav" id="nav" aria-label="Основная навигация">
-        <a class="nav__link" href="#hero">Главная</a>
-        <a class="nav__link" href="#catalog">Каталог</a>
-        <a class="nav__link" href="#about">О нас</a>
-        <a class="nav__link" href="#contacts">Контакты</a>
+        <a class="nav__link" href="#hero">Главная</a><a class="nav__link" href="#catalog">Каталог</a><a class="nav__link" href="#about">О нас</a><a class="nav__link" href="#contacts">Контакты</a>
       </nav>
-
       <div class="header__actions">
         <button class="icon-btn" id="cart-open" type="button" aria-label="Открыть корзину">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6 7h15l-1.5 9h-12L5 4H2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="9" cy="20" r="1.4" fill="currentColor"/>
-            <circle cx="18" cy="20" r="1.4" fill="currentColor"/>
-          </svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 7h15l-1.5 9h-12L5 4H2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="20" r="1.4" fill="currentColor"/><circle cx="18" cy="20" r="1.4" fill="currentColor"/></svg>
           <span class="cart-badge" id="cart-badge" hidden>0</span>
         </button>
         <button class="btn btn--ghost" id="login-open" type="button">Войти</button>
-        <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="nav">
-          <span></span><span></span><span></span>
-        </button>
+        <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
       </div>
     </div>
   </header>
-
   <main>
     <section class="hero" id="hero">
-      <div class="hero__orbs" aria-hidden="true">
-        <span class="orb orb--violet"></span>
-        <span class="orb orb--blue"></span>
-        <span class="orb orb--ring"></span>
-      </div>
+      <div class="hero__orbs" aria-hidden="true"><span class="orb orb--violet"></span><span class="orb orb--blue"></span><span class="orb orb--ring"></span></div>
       <div class="container hero__grid">
         <div class="hero__content reveal">
-          <p class="eyebrow">Премиальные смартфоны 2026</p>
+          <p class="eyebrow">Демонстрационный каталог смартфонов</p>
           <h1>Технологии будущего в твоих руках</h1>
-          <p class="hero__lead">
-            SmartBuy — демонстрационный магазин современных смартфонов.
-            Выбирайте флагманы с мощными камерами, яркими экранами и быстрой зарядкой.
-          </p>
-          <div class="hero__actions">
-            <a class="btn btn--primary" href="#catalog">Смотреть каталог</a>
-            <a class="btn btn--ghost" href="#benefits">Почему SmartBuy</a>
-          </div>
-          <ul class="hero__stats">
-            <li><strong>4</strong><span>флагмана в каталоге</span></li>
-            <li><strong>24/7</strong><span>демо-поддержка</span></li>
-            <li><strong>0 ₽</strong><span>доставка в демо</span></li>
-          </ul>
+          <p class="hero__lead">SmartBuy — демонстрационный магазин современных смартфонов. Выбирайте флагманы с мощными камерами, яркими экранами и быстрой зарядкой.</p>
+          <div class="hero__actions"><a class="btn btn--primary" href="#catalog">Смотреть каталог</a><a class="btn btn--ghost" href="#benefits">Почему SmartBuy</a></div>
+          <ul class="hero__stats"><li><strong>4</strong><span>модели в каталоге</span></li><li><strong>0 ₽</strong><span>реальных платежей</span></li><li><strong>100%</strong><span>демонстрационный проект</span></li></ul>
         </div>
-        <div class="hero__visual reveal">
-          <div class="phone-stage">
-            <img
-              class="hero__image"
-              src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=80"
-              alt="Современный смартфон на тёмном фоне"
-              width="520"
-              height="640">
-            <div class="phone-glow"></div>
-          </div>
-        </div>
+        <div class="hero__visual reveal"><div class="phone-stage"><img class="hero__image" src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1100&q=80" alt="Современный смартфон на тёмном фоне" width="520" height="640"><div class="phone-glow"></div></div></div>
       </div>
     </section>
-
-    <section class="section" id="catalog">
-      <div class="container">
-        <div class="section__head reveal">
-          <p class="eyebrow">Каталог</p>
-          <h2>Флагманские смартфоны</h2>
-          <p class="section__lead">Цены и товары демонстрационные. Корзина работает прямо в браузере.</p>
-        </div>
-        <div class="catalog" id="catalog-grid"></div>
-      </div>
-    </section>
-
-    <section class="section section--alt" id="benefits">
-      <div class="container">
-        <div class="section__head reveal">
-          <p class="eyebrow">Преимущества</p>
-          <h2>Почему клиенты выбирают нас?</h2>
-        </div>
-        <div class="benefits">
-          <article class="benefit reveal">
-            <div class="benefit__icon">✓</div>
-            <h3>Гарантия качества</h3>
-            <p>Каждый смартфон проходит проверку. Демо-гарантия 24 месяца на всю линейку.</p>
-          </article>
-          <article class="benefit reveal">
-            <div class="benefit__icon">⚡</div>
-            <h3>Быстрая доставка</h3>
-            <p>Отправка в день заказа по крупным городам. Отслеживание статуса в личном кабинете.</p>
-          </article>
-          <article class="benefit reveal">
-            <div class="benefit__icon">💬</div>
-            <h3>Поддержка покупателей</h3>
-            <p>Поможем с выбором модели, сравнением камер и настройкой устройства после покупки.</p>
-          </article>
-          <article class="benefit reveal">
-            <div class="benefit__icon">🔒</div>
-            <h3>Безопасная оплата</h3>
-            <p>Защищённые демо-платежи. Данные карт в этом магазине не обрабатываются.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="about">
-      <div class="container about">
-        <div class="about__copy reveal">
-          <p class="eyebrow">О нас</p>
-          <h2>SmartBuy — витрина технологий</h2>
-          <p>
-            Мы собрали демонстрационный интернет-магазин, чтобы показать, как может выглядеть
-            современная витрина электроники: тёмный премиальный интерфейс, понятная навигация
-            и живая корзина без серверной части.
-          </p>
-          <p>
-            SmartBuy ориентирован на тех, кто выбирает смартфон по камере, автономности и удобству.
-            Ассортимент небольшой специально: четыре актуальных флагмана, чтобы ничто не отвлекало
-            от выбора.
-          </p>
-        </div>
-        <div class="about__panel reveal">
-          <h3>Цифры магазина</h3>
-          <ul>
-            <li><span>Год запуска</span><strong>2026</strong></li>
-            <li><span>Моделей в демо</span><strong>4</strong></li>
-            <li><span>Средняя оценка</span><strong>4.9</strong></li>
-            <li><span>Города доставки</span><strong>120+</strong></li>
-          </ul>
-        </div>
-      </div>
-    </section>
+    <section class="section" id="catalog"><div class="container"><div class="section__head reveal"><p class="eyebrow">Каталог</p><h2>Флагманские смартфоны</h2><p class="section__lead">Цены и товары демонстрационные. Корзина работает прямо в браузере.</p></div><div class="catalog" id="catalog-grid"></div></div></section>
+    <section class="section section--alt" id="benefits"><div class="container"><div class="section__head reveal"><p class="eyebrow">Преимущества</p><h2>Почему клиенты выбирают нас?</h2></div><div class="benefits">
+      <article class="benefit reveal"><div class="benefit__icon">✓</div><h3>Информация о моделях</h3><p>В карточках собраны основные характеристики смартфонов для демонстрации каталога.</p></article>
+      <article class="benefit reveal"><div class="benefit__icon">⚡</div><h3>Интерактивная корзина</h3><p>Добавляйте товары, меняйте количество и проверяйте итоговую сумму. Данные хранятся в браузере.</p></article>
+      <article class="benefit reveal"><div class="benefit__icon">💬</div><h3>Демо-аккаунт</h3><p>Можно проверить интерфейс входа и выхода. Настоящей регистрации и личного кабинета нет.</p></article>
+      <article class="benefit reveal"><div class="benefit__icon">🔒</div><h3>Без реальных платежей</h3><p>Оплата не подключена. Кнопка оформления заказа показывает демонстрационное уведомление.</p></article>
+    </div></div></section>
+    <section class="section" id="about"><div class="container about">
+      <div class="about__copy reveal"><p class="eyebrow">О нас</p><h2>SmartBuy — витрина технологий</h2><p>SmartBuy — учебный демонстрационный проект. Он показывает интерфейс витрины электроники: каталог, адаптивную навигацию и корзину, работающую в браузере без серверной части.</p><p>SmartBuy ориентирован на тех, кто выбирает смартфон по камере, автономности и удобству. Ассортимент небольшой специально: четыре актуальных флагмана, чтобы ничто не отвлекало от выбора.</p></div>
+      <div class="about__panel reveal"><h3>Цифры магазина</h3><ul><li><span>Тип проекта</span><strong>Демо</strong></li><li><span>Моделей в каталоге</span><strong>4</strong></li><li><span>Серверная часть</span><strong>Нет</strong></li><li><span>Оплата</span><strong>Не подключена</strong></li></ul></div>
+    </div></section>
   </main>
-
-  <footer class="footer" id="contacts">
-    <div class="container footer__grid">
-      <div>
-        <a class="logo" href="#hero">
-          <span class="logo__mark">SB</span>
-          <span class="logo__text">SmartBuy</span>
-        </a>
-        <p class="footer__about">Демонстрационный магазин смартфонов. Товары и цены не являются офертой.</p>
-        <address>
-          Москва, Пресненская наб., 12<br>
-          +7 (495) 000-16-25<br>
-          <a href="mailto:hello@smartbuy.demo">hello@smartbuy.demo</a>
-        </address>
-      </div>
-      <div>
-        <h3>Навигация</h3>
-        <nav class="footer__nav">
-          <a href="#hero">Главная</a>
-          <a href="#catalog">Каталог</a>
-          <a href="#benefits">Преимущества</a>
-          <a href="#about">О нас</a>
-        </nav>
-      </div>
-      <div>
-        <h3>Социальные сети</h3>
-        <div class="socials">
-          <button type="button" class="social" data-social="Telegram">Telegram</button>
-          <button type="button" class="social" data-social="VK">VK</button>
-          <button type="button" class="social" data-social="YouTube">YouTube</button>
-        </div>
-        <form class="contact-form" id="contact-form">
-          <label for="contact-email">Написать нам</label>
-          <div class="contact-form__row">
-            <input id="contact-email" name="email" type="email" placeholder="Ваш email" required>
-            <button class="btn btn--primary" type="submit">Отправить</button>
-          </div>
-        </form>
-      </div>
-    </div>
-    <div class="container footer__copy">
-      <p>© 2026 SmartBuy. Все права защищены. Демонстрационный проект.</p>
-    </div>
-  </footer>
-
-  <aside class="drawer" id="cart-drawer" aria-hidden="true" role="dialog" aria-labelledby="cart-title">
-    <div class="drawer__overlay" data-close="cart"></div>
-    <div class="drawer__panel">
-      <div class="drawer__head">
-        <h2 id="cart-title">Корзина</h2>
-        <button class="icon-btn" type="button" data-close="cart" aria-label="Закрыть корзину">×</button>
-      </div>
-      <div class="cart-items" id="cart-items"></div>
-      <div class="cart-footer" id="cart-footer">
-        <div class="cart-total">
-          <span>Итого</span>
-          <strong id="cart-total">0 ₽</strong>
-        </div>
-        <button class="btn btn--primary btn--full" id="checkout-btn" type="button">Оформить заказ</button>
-      </div>
-    </div>
-  </aside>
-
-  <div class="modal" id="login-modal" aria-hidden="true" role="dialog" aria-labelledby="login-title">
-    <div class="modal__overlay" data-close="login"></div>
-    <div class="modal__panel">
-      <button class="icon-btn modal__close" type="button" data-close="login" aria-label="Закрыть">×</button>
-      <div id="login-form-view">
-        <p class="eyebrow">Аккаунт</p>
-        <h2 id="login-title">Войти в SmartBuy</h2>
-        <p class="modal__hint">Демо-вход: любой email и пароль от 6 символов.</p>
-        <form id="login-form">
-          <label>
-            Email
-            <input type="email" name="email" required placeholder="you@example.com">
-          </label>
-          <label>
-            Пароль
-            <input type="password" name="password" required minlength="6" placeholder="Минимум 6 символов">
-          </label>
-          <button class="btn btn--primary btn--full" type="submit">Войти</button>
-        </form>
-      </div>
-      <div id="login-success-view" hidden>
-        <p class="eyebrow">Готово</p>
-        <h2>Вы вошли</h2>
-        <p id="login-user"></p>
-        <button class="btn btn--ghost btn--full" id="logout-btn" type="button">Выйти</button>
-      </div>
-    </div>
-  </div>
-
+  <footer class="footer" id="contacts"><div class="container footer__grid">
+    <div><a class="logo" href="#hero"><span class="logo__mark">SB</span><span class="logo__text">SmartBuy</span></a><p class="footer__about">Демонстрационный магазин смартфонов. Товары и цены не являются офертой.</p><address>Москва, Пресненская наб., 12<br>+7 (495) 000-16-25<br><a href="mailto:hello@smartbuy.demo">hello@smartbuy.demo</a></address></div>
+    <div><h3>Навигация</h3><nav class="footer__nav"><a href="#hero">Главная</a><a href="#catalog">Каталог</a><a href="#benefits">Преимущества</a><a href="#about">О нас</a></nav></div>
+    <div><h3>Социальные сети</h3><div class="socials"><button type="button" class="social" data-social="Telegram">Telegram</button><button type="button" class="social" data-social="VK">VK</button><button type="button" class="social" data-social="YouTube">YouTube</button></div><form class="contact-form" id="contact-form"><label for="contact-email">Демо-форма (отправка отключена)</label><div class="contact-form__row"><input id="contact-email" name="email" type="email" placeholder="Ваш email" required><button class="btn btn--primary" type="submit">Отправить</button></div></form></div>
+  </div><div class="container footer__copy"><p>© 2026 SmartBuy. Все права защищены. Демонстрационный проект.</p></div></footer>
+  <aside class="drawer" id="cart-drawer" aria-hidden="true" role="dialog" aria-labelledby="cart-title"><div class="drawer__overlay" data-close="cart"></div><div class="drawer__panel"><div class="drawer__head"><h2 id="cart-title">Корзина</h2><button class="icon-btn" type="button" data-close="cart" aria-label="Закрыть корзину">×</button></div><div class="cart-items" id="cart-items"></div><div class="cart-footer" id="cart-footer"><div class="cart-total"><span>Итого</span><strong id="cart-total">0 ₽</strong></div><button class="btn btn--primary btn--full" id="checkout-btn" type="button">Проверить оформление (демо)</button></div></div></aside>
+  <div class="modal" id="login-modal" aria-hidden="true" role="dialog" aria-labelledby="login-title"><div class="modal__overlay" data-close="login"></div><div class="modal__panel"><button class="icon-btn modal__close" type="button" data-close="login" aria-label="Закрыть">×</button><div id="login-form-view"><p class="eyebrow">Аккаунт</p><h2 id="login-title">Войти в SmartBuy</h2><p class="modal__hint">Демо-вход: любой email и пароль от 6 символов.</p><form id="login-form"><label>Email<input type="email" name="email" required placeholder="you@example.com"></label><label>Пароль<input type="password" name="password" required minlength="6" placeholder="Минимум 6 символов"></label><button class="btn btn--primary btn--full" type="submit">Войти</button></form></div><div id="login-success-view" hidden><p class="eyebrow">Готово</p><h2>Вы вошли</h2><p id="login-user"></p><button class="btn btn--ghost btn--full" id="logout-btn" type="button">Выйти</button></div></div></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
   <script src="js/main.js"></script>
 </body>
 </html>
