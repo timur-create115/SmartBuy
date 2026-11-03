@@ -29,6 +29,11 @@ const PRODUCTS = [
   }
 ];
 
+const CART_KEY = "smartbuy-cart";
+const USER_KEY = "smartbuy-user";
+const MAX_QUANTITY = 99;
+const productById = new Map(PRODUCTS.map((product) => [product.id, product]));
+
 const cartOpenBtn = document.getElementById("cart-open");
 const cartDrawer = document.getElementById("cart-drawer");
 const cartItemsEl = document.getElementById("cart-items");
@@ -49,39 +54,82 @@ const nav = document.getElementById("nav");
 const toastEl = document.getElementById("toast");
 const contactForm = document.getElementById("contact-form");
 
-let cart = loadCart();
-let user = localStorage.getItem("smartbuy-user");
+function storageGet(key) {
+  try {
+    return localStorage.getItem(key);
+  } catch (error) {
+    return null;
+  }
+}
 
-function formatPrice(value) {
-  return new Intl.NumberFormat("ru-RU").format(value) + " ₽";
+function storageSet(key, value) {
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch (error) {
+    showToast("Браузер запретил сохранение данных. Изменения не сохранятся после перезагрузки.");
+    return false;
+  }
+}
+
+function storageRemove(key) {
+  try {
+    localStorage.removeItem(key);
+  } catch (error) {
+    showToast("Не удалось очистить сохранённые данные браузера.");
+  }
+}
+
+function normalizeCart(value) {
+  if (!Array.isArray(value)) return [];
+
+  const quantities = new Map();
+  value.forEach((item) => {
+    if (!item || typeof item !== "object" || typeof item.id !== "string") return;
+    if (!productById.has(item.id)) return;
+
+    const qty = Number(item.qty);
+    if (!Number.isInteger(qty) || qty < 1) return;
+    quantities.set(item.id, Math.min(MAX_QUANTITY, (quantities.get(item.id) || 0) + qty));
+  });
+
+  return Array.from(quantities, ([id, qty]) => ({ id, qty }));
 }
 
 function loadCart() {
   try {
-    return JSON.parse(localStorage.getItem("smartbuy-cart")) || [];
+    const stored = storageGet(CART_KEY);
+    return stored ? normalizeCart(JSON.parse(stored)) : [];
   } catch (error) {
     return [];
   }
 }
 
+let cart = loadCart();
+let user = storageGet(USER_KEY);
+if (typeof user !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(user)) user = null;
+
+function formatPrice(value) {
+  return new Intl.NumberFormat("ru-RU").format(value) + " ₽";
+}
+
 function saveCart() {
-  localStorage.setItem("smartbuy-cart", JSON.stringify(cart));
+  storageSet(CART_KEY, JSON.stringify(cart));
 }
 
 function showToast(message) {
+  if (!toastEl) return;
   toastEl.textContent = message;
   toastEl.classList.add("is-show");
   window.clearTimeout(showToast.timer);
-  showToast.timer = window.setTimeout(() => {
-    toastEl.classList.remove("is-show");
-  }, 2400);
+  showToast.timer = window.setTimeout(() => toastEl.classList.remove("is-show"), 3000);
 }
 
 function renderCatalog() {
   catalogGrid.innerHTML = PRODUCTS.map((product) => `
     <article class="card reveal">
       <div class="card__media">
-        <img src="${product.image}" alt="${product.name}" width="400" height="240">
+        <img src="${product.image}" alt="${product.name}" width="400" height="240" loading="lazy">
       </div>
       <div class="card__body">
         <h3>${product.name}</h3>
@@ -101,12 +149,13 @@ function cartCount() {
 
 function cartSum() {
   return cart.reduce((sum, item) => {
-    const product = PRODUCTS.find((entry) => entry.id === item.id);
-    return sum + product.price * item.qty;
+    const product = productById.get(item.id);
+    return product ? sum + product.price * item.qty : sum;
   }, 0);
 }
 
 function renderCart() {
+  cart = normalizeCart(cart);
   const count = cartCount();
   cartBadge.hidden = count === 0;
   cartBadge.textContent = String(count);
@@ -114,22 +163,24 @@ function renderCart() {
   if (!cart.length) {
     cartItemsEl.innerHTML = '<p class="cart-empty">Корзина пуста. Добавьте смартфон из каталога.</p>';
     cartFooter.hidden = true;
+    cartTotal.textContent = formatPrice(0);
     return;
   }
 
   cartFooter.hidden = false;
   cartItemsEl.innerHTML = cart.map((item) => {
-    const product = PRODUCTS.find((entry) => entry.id === item.id);
+    const product = productById.get(item.id);
+    if (!product) return "";
     return `
       <div class="cart-item">
-        <img src="${product.image}" alt="${product.name}">
+        <img src="${product.image}" alt="${product.name}" loading="lazy">
         <div>
           <strong>${product.name}</strong>
           <div>${formatPrice(product.price)}</div>
           <div class="qty">
             <button type="button" data-qty="${product.id}" data-delta="-1" aria-label="Уменьшить количество">−</button>
             <span>${item.qty}</span>
-            <button type="button" data-qty="${product.id}" data-delta="1" aria-label="Увеличить количество">+</button>
+            <button type="button" data-qty="${product.id}" data-delta="1" aria-label="Увеличить количество" ${item.qty >= MAX_QUANTITY ? "disabled" : ""}>+</button>
           </div>
         </div>
         <button class="remove" type="button" data-remove="${product.id}" aria-label="Удалить ${product.name}">Удалить</button>
@@ -140,8 +191,13 @@ function renderCart() {
 }
 
 function addToCart(id) {
+  if (!productById.has(id)) return;
   const existing = cart.find((item) => item.id === id);
   if (existing) {
+    if (existing.qty >= MAX_QUANTITY) {
+      showToast(`Максимум ${MAX_QUANTITY} шт. одного товара.`);
+      return;
+    }
     existing.qty += 1;
   } else {
     cart.push({ id, qty: 1 });
@@ -152,17 +208,17 @@ function addToCart(id) {
 }
 
 function changeQty(id, delta) {
+  if (!Number.isInteger(delta) || !productById.has(id)) return;
   const item = cart.find((entry) => entry.id === id);
   if (!item) return;
-  item.qty += delta;
-  if (item.qty < 1) {
-    cart = cart.filter((entry) => entry.id !== id);
-  }
+  item.qty = Math.min(MAX_QUANTITY, item.qty + delta);
+  if (item.qty < 1) cart = cart.filter((entry) => entry.id !== id);
   saveCart();
   renderCart();
 }
 
 function removeFromCart(id) {
+  if (!productById.has(id)) return;
   cart = cart.filter((entry) => entry.id !== id);
   saveCart();
   renderCart();
@@ -170,6 +226,7 @@ function removeFromCart(id) {
 }
 
 function setOpen(element, open) {
+  if (!element) return;
   element.classList.toggle("is-open", open);
   element.setAttribute("aria-hidden", String(!open));
   document.body.style.overflow = open || document.body.classList.contains("menu-open") ? "hidden" : "";
@@ -190,38 +247,28 @@ function updateLoginView() {
 
 catalogGrid.addEventListener("click", (event) => {
   const button = event.target.closest("[data-add]");
-  if (!button) return;
-  addToCart(button.dataset.add);
+  if (button) addToCart(button.dataset.add);
 });
 
 cartItemsEl.addEventListener("click", (event) => {
   const qtyBtn = event.target.closest("[data-qty]");
   const removeBtn = event.target.closest("[data-remove]");
-  if (qtyBtn) {
-    changeQty(qtyBtn.dataset.qty, Number(qtyBtn.dataset.delta));
-  }
-  if (removeBtn) {
-    removeFromCart(removeBtn.dataset.remove);
-  }
+  if (qtyBtn) changeQty(qtyBtn.dataset.qty, Number(qtyBtn.dataset.delta));
+  if (removeBtn) removeFromCart(removeBtn.dataset.remove);
 });
 
 cartOpenBtn.addEventListener("click", () => setOpen(cartDrawer, true));
 
 document.querySelectorAll("[data-close]").forEach((node) => {
   node.addEventListener("click", () => {
-    const target = node.dataset.close;
-    if (target === "cart") setOpen(cartDrawer, false);
-    if (target === "login") setOpen(loginModal, false);
+    if (node.dataset.close === "cart") setOpen(cartDrawer, false);
+    if (node.dataset.close === "login") setOpen(loginModal, false);
   });
 });
 
 checkoutBtn.addEventListener("click", () => {
   if (!cart.length) return;
-  cart = [];
-  saveCart();
-  renderCart();
-  setOpen(cartDrawer, false);
-  showToast("Заказ оформлен. Это демонстрационный магазин.");
+  showToast("Это демонстрационный магазин. Заказ не создан, корзина сохранена.");
 });
 
 loginOpenBtn.addEventListener("click", () => setOpen(loginModal, true));
@@ -229,29 +276,35 @@ loginOpenBtn.addEventListener("click", () => setOpen(loginModal, true));
 loginForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const data = new FormData(loginForm);
-  user = String(data.get("email"));
-  localStorage.setItem("smartbuy-user", user);
+  const email = String(data.get("email") || "").trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showToast("Введите корректный email.");
+    return;
+  }
+  user = email;
+  storageSet(USER_KEY, user);
   updateLoginView();
-  showToast("Вход выполнен");
+  setOpen(loginModal, false);
+  showToast("Демо-вход выполнен. Реальной авторизации нет.");
 });
 
 logoutBtn.addEventListener("click", () => {
   user = null;
-  localStorage.removeItem("smartbuy-user");
+  storageRemove(USER_KEY);
   loginForm.reset();
   updateLoginView();
-  showToast("Вы вышли из аккаунта");
+  setOpen(loginModal, false);
+  showToast("Вы вышли из демо-аккаунта.");
 });
 
 contactForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  contactForm.reset();
-  showToast("Сообщение отправлено. Это демо-форма.");
+  showToast("Это демонстрационная форма. Сообщение не отправлено.");
 });
 
 document.querySelectorAll("[data-social]").forEach((button) => {
   button.addEventListener("click", () => {
-    showToast("Демо-ссылка: " + button.dataset.social);
+    showToast(`Ссылка на ${button.dataset.social} пока не настроена.`);
   });
 });
 
@@ -259,12 +312,14 @@ menuToggle.addEventListener("click", () => {
   const open = !document.body.classList.contains("menu-open");
   document.body.classList.toggle("menu-open", open);
   menuToggle.setAttribute("aria-expanded", String(open));
+  document.body.style.overflow = open ? "hidden" : "";
 });
 
 nav.addEventListener("click", (event) => {
   if (event.target.closest("a")) {
     document.body.classList.remove("menu-open");
     menuToggle.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
   }
 });
 
@@ -273,6 +328,8 @@ document.addEventListener("keydown", (event) => {
     setOpen(cartDrawer, false);
     setOpen(loginModal, false);
     document.body.classList.remove("menu-open");
+    menuToggle.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
   }
 });
 
