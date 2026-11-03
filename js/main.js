@@ -234,7 +234,7 @@ function setOpen(element, open) {
     element.classList.add("is-open");
     element.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
-    const firstControl = element.querySelector("button, input, a[href], [tabindex]:not([tabindex="-1"])");
+    const firstControl = element.querySelector('button, input, a[href], [tabindex]:not([tabindex="-1"])');
     window.requestAnimationFrame(() => firstControl?.focus());
   } else {
     element.classList.remove("is-open");
@@ -339,7 +339,7 @@ nav.addEventListener("click", (event) => {
 document.addEventListener("keydown", (event) => {
   const activeDialog = document.querySelector(".drawer.is-open, .modal.is-open");
   if (event.key === "Tab" && activeDialog) {
-    const focusable = [...activeDialog.querySelectorAll("button:not([disabled]), input:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])")]
+    const focusable = [...activeDialog.querySelectorAll('button:not([disabled]), input:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])')]
       .filter((element) => element.offsetParent !== null);
     if (focusable.length) {
       const first = focusable[0];
