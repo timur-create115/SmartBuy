@@ -1768,3 +1768,33 @@ body.menu-open {
     font-size: 11px;
   }
 }
+
+
+/* Compact mobile footer demo form */
+@media screen and (max-width: 768px) {
+  #contacts #contact-form,
+  #contacts #contact-form .contact-form__row {
+    width: 100%;
+    min-width: 0;
+  }
+
+  #contacts #contact-form .contact-form__row input {
+    width: 100%;
+    height: 42px;
+    min-height: 42px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
+  #contacts #contact-form .contact-form__row button {
+    width: 100%;
+    height: 42px;
+    min-height: 42px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.2;
+  }
+}
