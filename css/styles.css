@@ -1677,3 +1677,94 @@ body.menu-open {
     padding: 9px;
   }
 }
+
+
+/* Typography refinement for the remaining mobile footer and store statistics */
+@media screen and (max-width: 768px) {
+  #about .about__panel ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  #about .about__panel li {
+    gap: 4px;
+    padding: 9px;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  #about .about__panel li span {
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  #about .about__panel li strong {
+    font-size: 14px;
+    line-height: 1.3;
+  }
+
+  #contacts .footer__about {
+    color: #9296a5;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  #contacts .footer__nav a,
+  #contacts .socials .social {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  #contacts .footer__nav {
+    gap: 4px;
+  }
+
+  #contacts .footer__nav a {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 6px 0;
+  }
+
+  #contacts .socials {
+    gap: 2px;
+  }
+
+  #contacts .socials .social {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 6px 0;
+  }
+
+  #contacts .footer__copy {
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  #contacts .footer__copy p {
+    font-size: 12px;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  #about .about__panel li,
+  #about .about__panel li span {
+    font-size: 13px;
+  }
+
+  #about .about__panel li strong {
+    font-size: 14px;
+  }
+
+  #contacts .footer__about {
+    font-size: 12px;
+  }
+
+  #contacts .footer__copy,
+  #contacts .footer__copy p {
+    font-size: 11px;
+  }
+}
